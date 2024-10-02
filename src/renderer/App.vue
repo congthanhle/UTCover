@@ -1,11 +1,6 @@
 <script setup lang="ts">
-
-
 import { ref } from 'vue';
-import HelloWorld from './components/HelloWorld.vue'
 import ItemList from './components/ItemList.vue';
-import FolderPathInput from './components/FolderPathInput.vue';
-
 window.electronAPI.sendMessage('Hello from App.vue!');
 
 const fileList = ref([]);
@@ -13,9 +8,6 @@ const fileList = ref([]);
 </script>
 
 <template>
-  <div>
-  </div>
-  <FolderPathInput/>
   <ItemList :item-list="fileList" style="margin-top: 20px;"/>
 </template>
 
