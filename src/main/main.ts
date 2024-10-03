@@ -1,5 +1,7 @@
 import {app, BrowserWindow, ipcMain, session, dialog} from 'electron';
 import {join} from 'path';
+const path = require('path');
+const fs = require('fs');
 
 function createWindow () {
   const mainWindow = new BrowserWindow({
@@ -59,3 +61,40 @@ ipcMain.handle('select-directory', async (event, operation) => {
       return result.filePaths[0];
   }
 });
+
+ipcMain.handle('get-files-from-pages-and-components', (event, rootPath) => {
+  const getFilesRecursively = (dir: string, fileList: { filename: string; path: string }[] = []) => {
+    const files = fs.readdirSync(dir);
+    files.forEach((file) => {
+      const filePath = path.join(dir, file);
+      const stat = fs.statSync(filePath);
+      if (stat.isDirectory()) {
+        getFilesRecursively(filePath, fileList);
+      } else {
+        if (!file.endsWith('.stories.ts')) {
+          fileList.push({ filename: file, path: filePath });
+        }
+      }
+    });
+    return fileList;
+  };
+
+  const getFilesFromPagesAndComponents = (rootPath: string) => {
+    const result: { pages: { filename: string; path: string }[], components: { filename: string; path: string }[] } = { pages: [], components: [] };
+
+    const pagesDir = path.join(rootPath, 'pages');
+    if (fs.existsSync(pagesDir)) {
+      result.pages = getFilesRecursively(pagesDir);
+    }
+
+    const componentsDir = path.join(rootPath, 'components');
+    if (fs.existsSync(componentsDir)) {
+      result.components = getFilesRecursively(componentsDir);
+    }
+
+    return result;
+  };
+
+  return getFilesFromPagesAndComponents(rootPath);
+});
+

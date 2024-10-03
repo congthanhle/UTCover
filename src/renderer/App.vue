@@ -3,25 +3,28 @@ import { ref } from 'vue';
 import ItemList from './components/ItemList.vue';
 window.electronAPI.sendMessage('Hello from App.vue!');
 
-const fileList = ref([]);
+const pageList = ref<any[]>([]);
+const componentList = ref<any[]>([]);
+
+const handleListFile = (data: {pageList: any[], componentList: any[]}) => {
+  pageList.value = data.pageList;
+  componentList.value = data.componentList;
+  console.log(data);
+}
 
 </script>
 
 <template>
-  <ItemList :item-list="fileList" style="margin-top: 20px;"/>
+  <ItemList style="margin-top: 20px;" @getListEvent="handleListFile"/>
+  <div class="button-container">
+    <Button v-if="pageList.length > 0 || componentList.length > 0" label="Test Unit" severity="success" raised style="margin-top: 16px;"/>
+  </div>
+  
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+.button-container {
+  display: flex;
+  justify-content: flex-end; 
 }
 </style>

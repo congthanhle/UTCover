@@ -6,6 +6,7 @@ export default interface ElectronApi {
   ipcRenderer: {
     invoke: (channel: string, ...args: any[]) => Promise<any>;
   };
+  getFilesFromPagesAndComponents: (rootPath: string) => Promise<any>;
 }
 
 declare global {

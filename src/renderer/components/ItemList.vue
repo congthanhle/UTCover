@@ -1,18 +1,22 @@
 <template>
   <div class="folder-path-input">
-    <InputText type="text" v-model="folderPath" readonly="true" style="min-width: 60%;" />
-    <Button label="Browse" @click="getFolderPath" severity="success" />
+    <InputText type="text" v-model="folderPath" placeholder="Folder path" readonly="true" style="min-width: 60%;" />
+    <Button label="Browse" @click="getFolderPath" severity="success" outlined />
   </div>
-  <h3>Components</h3>
-  <DataTable v-model:selection="selectedPage" :value="props.componentList" dataKey="id">
-    <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-    <Column field="filename" header="File name"></Column>
-  </DataTable>
-  <h3>Pages</h3>
-  <DataTable v-model:selection="selectedComponent" :value="props.pageList" dataKey="id">
-    <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-    <Column field="filename" header="File name"></Column>
-  </DataTable>
+  <div v-if="componentList.length > 0">
+    <h3>Components</h3>
+    <DataTable v-model:selection="selectedPage" showGridlines paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]"  :value="componentList" dataKey="path">
+      <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+      <Column field="filename" header="File name"></Column>
+    </DataTable>
+  </div>
+  <div v-if="pageList.length > 0">
+    <h3>Pages</h3>
+    <DataTable v-model:selection="selectedComponent" showGridlines paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]"  :value="pageList" dataKey="path">
+      <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+      <Column field="filename" header="File name"></Column>
+    </DataTable>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -20,59 +24,28 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-import { ref } from 'vue';
-
-const props = defineProps(['componentList', 'pageList'])
+import { ref, watch } from 'vue';
 
 const selectedPage = ref<any[]>([]);
 const selectedComponent = ref<any[]>([]);
+const pageList = ref<any[]>([]);
+const componentList = ref<any[]>([]);
 const folderPath = ref("")
 
-const getFolderPath = () => {
-  window.electronAPI.ipcRenderer.invoke('select-directory', 'export').then((path: string) => {
+const emit = defineEmits(['getListEvent']); 
+
+watch([pageList, componentList], (newValue) => {
+  emit('getListEvent', {pageList: newValue[0], componentList: newValue[1]});
+});
+
+const getFolderPath = async () => {
+  await window.electronAPI.ipcRenderer.invoke('select-directory', 'export').then((path: string) => {
     folderPath.value = path
   })
+  const result = await window.electronAPI.getFilesFromPagesAndComponents(folderPath.value);
+  pageList.value = result.pages;
+  componentList.value = result.components;
 }
-
-interface FileItem {
-  filename: string;
-  path: string;
-}
-
-// const getFilesRecursively = (dir: any, fileList: FileItem[] = []) => {
-//   const files = fs.readdirSync(dir);
-
-//   files.forEach((file: any) => {
-//     const filePath = path.join(dir, file);
-//     const stat = fs.statSync(filePath);
-
-//     if (stat.isDirectory()) {
-//       getFilesRecursively(filePath, fileList);
-//     } else {
-//       fileList.push({ filename: file, path: filePath });
-//     }
-//   });
-
-//   return fileList;
-// }
-// const getFilesFromPagesAndComponents = (rootPath: string) => {
-//   const result: { pages: FileItem[], components: FileItem[] } = {
-//     pages: [],
-//     components: [],
-//   };
-
-//   const pagesDir = path.join(rootPath, 'pages');
-//   if (fs.existsSync(pagesDir)) {
-//     result.pages = getFilesRecursively(pagesDir);
-//   }
-
-//   const componentsDir = path.join(rootPath, 'components');
-//   if (fs.existsSync(componentsDir)) {
-//     result.components = getFilesRecursively(componentsDir);
-//   }
-
-//   return result;
-// }
 
 </script>
 
