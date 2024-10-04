@@ -5,8 +5,8 @@ const fs = require('fs');
 
 function createWindow () {
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 800,
     webPreferences: {
       preload: join(__dirname, 'preload.js'),
       nodeIntegration: false,
@@ -51,7 +51,6 @@ ipcMain.on('message', (event, message) => {
 })
 
 ipcMain.handle('select-directory', async (event, operation) => {
-  const properties = operation === 'export' ? ['openDirectory', 'createDirectory'] : ['openDirectory'];
   const result = await dialog.showOpenDialog({
       properties: ['openDirectory', 'createDirectory']
   });
@@ -79,22 +78,35 @@ ipcMain.handle('get-files-from-pages-and-components', (event, rootPath) => {
     return fileList;
   };
 
-  const getFilesFromPagesAndComponents = (rootPath: string) => {
-    const result: { pages: { filename: string; path: string }[], components: { filename: string; path: string }[] } = { pages: [], components: [] };
+  const getFilesFromMultipleDirectories = (rootPath: string) => {
+    const result: {
+      pages: { filename: string; path: string }[];
+      components: { filename: string; path: string }[];
+      testPages: { filename: string; path: string }[];
+      testComponents: { filename: string; path: string }[];
+    } = { pages: [], components: [], testPages: [], testComponents: [] };
 
-    const pagesDir = path.join(rootPath, 'pages');
-    if (fs.existsSync(pagesDir)) {
-      result.pages = getFilesRecursively(pagesDir);
-    }
+    const srcDir = path.join(rootPath, 'src');
+    const testDir = path.join(rootPath, 'tests', 'unit');
 
-    const componentsDir = path.join(rootPath, 'components');
-    if (fs.existsSync(componentsDir)) {
-      result.components = getFilesRecursively(componentsDir);
-    }
+    const directories = [
+      { name: 'pages', path: path.join(srcDir, 'pages'), resultKey: 'pages' },
+      { name: 'components', path: path.join(srcDir, 'components'), resultKey: 'components' },
+      { name: 'testPages', path: path.join(testDir, 'pages'), resultKey: 'testPages' },
+      { name: 'testComponents', path: path.join(testDir, 'components'), resultKey: 'testComponents' },
+    ];
+
+    directories.forEach(({ name, path: dirPath, resultKey }) => {
+      if (fs.existsSync(dirPath)) {
+        result[resultKey] = getFilesRecursively(dirPath);
+      } else {
+        console.warn(`Directory not found: ${name} at ${dirPath}`);
+      }
+    });
 
     return result;
   };
 
-  return getFilesFromPagesAndComponents(rootPath);
+  return getFilesFromMultipleDirectories(rootPath);
 });
 

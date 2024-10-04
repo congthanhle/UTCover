@@ -3,7 +3,7 @@ import Result from '../pages/Result.vue';
 
 const routes = [
   {
-    path: '/',
+    path: '/result',
     name: 'Result',
     component: Result
   },

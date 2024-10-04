@@ -29,6 +29,7 @@
     "path": "^0.12.7",
     "primeicons": "^7.0.0",
     "primevue": "^4.0.7",
+    "tailwindcss-primeui": "^0.3.4",
     "vue": "^3.3.8",
     "vue-router": "^4.4.5"
   }
