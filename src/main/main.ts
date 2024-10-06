@@ -2,6 +2,7 @@ import {app, BrowserWindow, ipcMain, session, dialog} from 'electron';
 import {join} from 'path';
 const path = require('path');
 const fs = require('fs');
+import ExternalTestRunner from './utils/TestRunner';
 
 function createWindow () {
   const mainWindow = new BrowserWindow({
@@ -109,4 +110,15 @@ ipcMain.handle('get-files-from-pages-and-components', (event, rootPath) => {
 
   return getFilesFromMultipleDirectories(rootPath);
 });
+
+ipcMain.handle('run-external-tests', async (event, projectPath) => {
+  const testRunner = new ExternalTestRunner(projectPath);
+  try {
+    const results = await testRunner.runTests();
+    return { success: true, data: results };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+});
+
 

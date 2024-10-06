@@ -5,5 +5,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
   ipcRenderer: {
     invoke: (channel, ...args) => ipcRenderer.invoke(channel, ...args),            
   },
-  getFilesFromPagesAndComponents: (rootPath) => ipcRenderer.invoke('get-files-from-pages-and-components', rootPath)
+  getFilesFromPagesAndComponents: (rootPath) => ipcRenderer.invoke('get-files-from-pages-and-components', rootPath),
+  runExternalTests: (projectPath) => ipcRenderer.invoke('run-external-tests', projectPath)
 });

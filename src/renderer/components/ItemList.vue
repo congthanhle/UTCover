@@ -45,6 +45,8 @@ const pageList = ref<any[]>([]);
 const componentList = ref<any[]>([]);
 const folderPath = ref("")
 const loading = ref<boolean>(false);
+const testResults = ref(null);
+const error = ref(null);
 
 interface FileInfo {
   filename: string;
@@ -115,15 +117,30 @@ const getFolderPath = async () => {
   componentList.value = mergedResult.mergedComponents;
 }
 
-const runTest = () => {
-  router.push({ path: '/result' })
-  console.log("run test")
+const runTest = async () => {
+  try {
+    const result = await window.electronAPI.runExternalTests(folderPath.value)
+    if (result.success) {
+      testResults.value = result.data
+      console.log("result: ", result.data);
+    } else {
+      error.value = result.error
+      console.log("error: ", error.value);
+    }
+  } catch (err: any) {
+    console.log("run test error: ", err.message)
+    // error.value = 'Lỗi khi chạy tests: ' + err.message
+  } finally {
+    // isRunning.value = false
+    console.log("run test end")
+  }
+  
 }
 
 </script>
 
 <style lang="css" scoped>
-.title{
+.title {
   color: rgb(33, 196, 93);
 }
 
