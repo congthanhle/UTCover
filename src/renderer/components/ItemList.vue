@@ -1,9 +1,11 @@
 <template>
+  <BlockUI :blocked="isRunning" fullScreen />
+  <Toast />
   <div class="folder-path-input">
     <InputText type="text" v-model="folderPath" placeholder="Folder path" readonly="true" style="min-width: 60%;" />
     <Button label="Browse" @click="getFolderPath" severity="success" outlined />
   </div>
-  <div v-if="loading" class="loading">
+  <div v-if="isLoading" class="isLoading">
     <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="transparent" animationDuration=".5s"
       aria-label="Custom ProgressSpinner" />
   </div>
@@ -31,20 +33,24 @@
 
 <script setup lang="ts">
 import DataTable from 'primevue/datatable';
+import BlockUI from 'primevue/blockui';
 import Column from 'primevue/column';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
+import Toast from 'primevue/toast';
 import ProgressSpinner from 'primevue/progressspinner';
+import { useToast } from "primevue/usetoast";
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 
-const router = useRouter();
+const toast = useToast();
 const selectedPage = ref<any[]>([]);
 const selectedComponent = ref<any[]>([]);
 const pageList = ref<any[]>([]);
 const componentList = ref<any[]>([]);
 const folderPath = ref("")
-const loading = ref<boolean>(false);
+const isLoading = ref<boolean>(false);
+const isRunning = ref<boolean>(false);
 const testResults = ref(null);
 const error = ref(null);
 
@@ -109,9 +115,9 @@ const getFolderPath = async () => {
   await window.electronAPI.ipcRenderer.invoke('select-directory', 'export').then((path: string) => {
     folderPath.value = path
   })
-  loading.value = true;
+  isLoading.value = true;
   const result = await window.electronAPI.getFilesFromPagesAndComponents(folderPath.value);
-  loading.value = !result;
+  isLoading.value = !result;
   const mergedResult = await processAllFiles(result.components, result.testComponents, result.pages, result.testPages);
   pageList.value = mergedResult.mergedPages;
   componentList.value = mergedResult.mergedComponents;
@@ -119,22 +125,24 @@ const getFolderPath = async () => {
 
 const runTest = async () => {
   try {
+    isRunning.value = true;
+    console.log("run test start");
+    toast.add({ severity: 'info', summary: 'Running...', closable: false });
     const result = await window.electronAPI.runExternalTests(folderPath.value)
     if (result.success) {
       testResults.value = result.data
       console.log("result: ", result.data);
     } else {
       error.value = result.error
-      console.log("error: ", error.value);
+      toast.add({ severity: 'error', summary: 'Error Message', detail: error.value, life: 1000 });
     }
   } catch (err: any) {
-    console.log("run test error: ", err.message)
-    // error.value = 'Lỗi khi chạy tests: ' + err.message
+    console.log("error: ", err);
+    toast.add({ severity: 'error', summary: 'Error Message', detail: err, life: 1000 });
   } finally {
-    // isRunning.value = false
-    console.log("run test end")
+    toast.removeAllGroups();
+    isRunning.value = false;
   }
-  
 }
 
 </script>
@@ -149,7 +157,7 @@ const runTest = async () => {
   justify-content: flex-end;
 }
 
-.loading {
+.isLoading {
   display: flex;
   justify-content: center;
   margin-top: 20px;

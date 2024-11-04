@@ -5,11 +5,12 @@ import PrimeVue from "primevue/config";
 import Aura from '@primevue/themes/aura';
 import Button from 'primevue/button';
 import router from './router';
+import ToastService from 'primevue/toastservice';
 
 
 const app = createApp(App);
 app.component('Button', Button);
-
+app.use(ToastService);
 app.use(PrimeVue, {
   theme: {
       preset: Aura,
