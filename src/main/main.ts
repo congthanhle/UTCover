@@ -111,8 +111,8 @@ ipcMain.handle('get-files-from-pages-and-components', (event, rootPath) => {
   return getFilesFromMultipleDirectories(rootPath);
 });
 
-ipcMain.handle('run-external-tests', async (event, projectPath) => {
-  const testRunner = new ExternalTestRunner(projectPath);
+ipcMain.handle('run-external-tests', async (event, projectPath, filesPath) => {
+  const testRunner = new ExternalTestRunner(projectPath, filesPath);
   try {
     const results = await testRunner.runTests();
     return { success: true, data: results };

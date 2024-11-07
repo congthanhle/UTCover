@@ -27,15 +27,18 @@ interface TestResult {
 
 class ExternalTestRunner {
   private projectPath: string;
+  private filesPath?: Array<string>;
   private outputCallback?: (data: string) => void;
   private errorCallback?: (data: string) => void;
 
   constructor(
     projectPath: string, 
+    filesPath?: Array<string>,
     outputCallback?: (data: string) => void,
     errorCallback?: (data: string) => void
   ) {
     this.projectPath = projectPath;
+    this.filesPath = filesPath;
     this.outputCallback = outputCallback;
     this.errorCallback = errorCallback;
   }
@@ -65,7 +68,7 @@ class ExternalTestRunner {
         // Tìm script test:unit trong package.json
         const mochaScript = scripts['test:unit'];
         if (mochaScript) {
-          return ['npm', 'run', 'test:unit', '--', '--reporter', 'json'];
+          return ['npm', 'run', 'test:unit'];
         }
         return ['npx', 'mocha', '--reporter', 'json'];
       case 'vitest':
@@ -111,14 +114,16 @@ class ExternalTestRunner {
     this.log('Running tests...');
     const framework = await this.detectTestFramework();
     const command = await this.getTestCommand(framework);
-    
+    const filesString = this.filesPath?.join(" ");
+    if (filesString) {
+      command.push(filesString);
+    }
     return new Promise((resolve, reject) => {
-      // Merge environment variables
       const env = {
-        ...process.env,
-        NODE_ENV: 'test',
-        NODE_OPTIONS: '--max-old-space-size=8192',
-        ...options.env
+      ...process.env,
+      NODE_ENV: 'test',
+      NODE_OPTIONS: '--max-old-space-size=8192',
+      ...options.env
       };
 
       this.log(`Executing command: ${command.join(' ')}`);

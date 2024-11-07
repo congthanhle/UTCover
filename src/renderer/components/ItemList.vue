@@ -48,7 +48,7 @@ const selectedPage = ref<any[]>([]);
 const selectedComponent = ref<any[]>([]);
 const pageList = ref<any[]>([]);
 const componentList = ref<any[]>([]);
-const folderPath = ref("")
+const folderPath = ref("");
 const isLoading = ref<boolean>(false);
 const isRunning = ref<boolean>(false);
 const testResults = ref(null);
@@ -124,11 +124,15 @@ const getFolderPath = async () => {
 }
 
 const runTest = async () => {
+  const componentPaths = selectedComponent.value.map((obj) => obj.testPath);
+  const pagePaths = selectedPage.value.map((obj) => obj.testPath);
+  const filesPath = [...componentPaths, ...pagePaths];
+  console.log("filesPath: ", filesPath);
   try {
     isRunning.value = true;
     console.log("run test start");
     toast.add({ severity: 'info', summary: 'Running...', closable: false });
-    const result = await window.electronAPI.runExternalTests(folderPath.value)
+    const result = await window.electronAPI.runExternalTests(folderPath.value, filesPath)
     if (result.success) {
       testResults.value = result.data
       console.log("result: ", result.data);
@@ -137,6 +141,7 @@ const runTest = async () => {
       toast.add({ severity: 'error', summary: 'Error Message', detail: error.value, life: 1000 });
     }
   } catch (err: any) {
+    isRunning.value = false;
     console.log("error: ", err);
     toast.add({ severity: 'error', summary: 'Error Message', detail: err, life: 1000 });
   } finally {

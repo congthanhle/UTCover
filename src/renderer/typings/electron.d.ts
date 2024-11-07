@@ -7,7 +7,7 @@ export default interface ElectronApi {
     invoke: (channel: string, ...args: any[]) => Promise<any>;
   };
   getFilesFromPagesAndComponents: (rootPath: string) => Promise<any>;
-  runExternalTests: (projectPath: string) => Promise<any>;
+  runExternalTests: (projectPath: string, filesPath?: string[]) => Promise<any>;
 }
 
 declare global {
