@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import ItemList from './components/ItemList.vue';
-window.electronAPI.sendMessage('Hello from App.vue!');
-
+    window.electronAPI.sendMessage('Hello from App.vue!');
 </script>
 
 <template>
-  <ItemList style="margin-top: 20px;"/>
+    <div id="app">
+        <router-view></router-view>
+    </div>
 </template>
 
 <style scoped></style>

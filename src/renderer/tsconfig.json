@@ -10,7 +10,15 @@
       "resolveJsonModule": true,
       "esModuleInterop": true,
       "lib": ["esnext", "dom"],
-      "types": ["vite/client"]
+      "types": ["vite/client"],
+      "baseUrl": ".",
+      "paths": {
+        "@components/*": ["src/renderer/components/*"],
+        "@pages/*": ["src/renderer/pages/*"],
+        "@layouts/*": ["src/renderer/layouts/*"],
+        "@assets/*": ["src/renderer/assets/*"],
+        "@utils/*": ["src/renderer/utils/*"]
+      }
     },
     "include": ["./**/*.ts", "./**/*.d.ts", "./**/*.tsx", "./**/*.vue"],
   }

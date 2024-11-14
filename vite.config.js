@@ -23,6 +23,11 @@ const config = defineConfig({
     alias: {
       "path": "path-browserify",
       "fs": "browserify-fs",
+      '@components': Path.resolve(__dirname, 'src/renderer/components'),
+      '@pages': Path.resolve(__dirname, 'src/renderer/pages'),
+      '@layouts': Path.resolve(__dirname, 'src/renderer/layouts'),
+      '@assets': Path.resolve(__dirname, 'src/renderer/assets'),
+
     },
   },
   plugins: [vuePlugin()],

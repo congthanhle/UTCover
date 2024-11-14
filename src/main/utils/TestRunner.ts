@@ -65,7 +65,6 @@ class ExternalTestRunner {
       case 'jest':
         return ['npx', 'jest', '--json'];
       case 'mocha':
-        // Tìm script test:unit trong package.json
         const mochaScript = scripts['test:unit'];
         if (mochaScript) {
           return ['npm', 'run', 'test:unit'];
@@ -107,7 +106,7 @@ class ExternalTestRunner {
     throw new Error('No supported test framework found');
   }
 
-  async runTests(options: {
+    async runTests(options: {
     env?: NodeJS.ProcessEnv;
     timeout?: number;
   } = {}): Promise<TestResult> {
@@ -120,22 +119,22 @@ class ExternalTestRunner {
     }
     return new Promise((resolve, reject) => {
       const env = {
-      ...process.env,
-      NODE_ENV: 'test',
-      NODE_OPTIONS: '--max-old-space-size=8192',
-      ...options.env
+        ...process.env,
+        NODE_ENV: 'test',
+        NODE_OPTIONS: '--max-old-space-size=8192',
+        ...options.env
       };
-
+  
       this.log(`Executing command: ${command.join(' ')}`);
       const testProcess = spawn(command[0], command.slice(1), {
         cwd: this.projectPath,
         env,
         shell: true
       });
-
+  
       let outputData = '';
       let errorData = '';
-
+  
       // Set timeout if specified
       let timeoutId: NodeJS.Timeout | undefined;
       if (options.timeout) {
@@ -144,40 +143,47 @@ class ExternalTestRunner {
           reject(new Error(`Test execution timed out after ${options.timeout}ms`));
         }, options.timeout);
       }
-
+  
       testProcess.stdout.on('data', (data: Buffer) => {
         const output = data.toString();
         outputData += output;
-        this.log(output);
       });
-
+  
       testProcess.stderr.on('data', (data: Buffer) => {
         const error = data.toString();
         errorData += error;
         this.error(error);
       });
-
+  
       testProcess.on('close', (code: number) => {
         if (timeoutId) {
           clearTimeout(timeoutId);
         }
-
+  
         this.log(`Test process exited with code: ${code}`);
-        
+  
         if (code !== 0 && !this.isIgnorableError(errorData)) {
           reject(new Error(`Test process exited with code ${code}\n${errorData}`));
           return;
         }
-
+  
+        console.log("outputData: ", outputData);
+  
         try {
           const result = this.formatResults(outputData, framework);
           this.log('Tests completed successfully');
-          console.log('12. Test results: ', result);
           resolve(result);
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : 'Unknown error';
           reject(new Error(`Failed to parse test results: ${errorMessage}`));
         }
+      });
+  
+      testProcess.on('error', (err) => {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+        reject(new Error(`Failed to start test process: ${err.message}`));
       });
     });
   }
@@ -210,7 +216,7 @@ class ExternalTestRunner {
         case 'jest':
           return this.formatJestResults(parsedResults);
         case 'mocha':
-          return this.formatMochaResults(parsedResults);
+          return parsedResults;
         case 'vitest':
           return this.formatVitestResults(parsedResults);
         default:
