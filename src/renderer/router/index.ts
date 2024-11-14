@@ -4,6 +4,7 @@ import ItemList from '@pages/UnitTest/ItemList.vue';
 import Result from '@pages/UnitTest/Result.vue';
 import Dashboard from '@pages/Dashboard.vue';
 import BaseLayout from '@layouts/BaseLayout.vue';
+import Calendar from '@pages/Calendar.vue';
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
         path: '/result',
         name: 'Result',
         component: Result,
+      },
+      {
+        path: '/calendar',
+        name: 'Calendar',
+        component: Calendar,
       },
     ],
   },

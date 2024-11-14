@@ -42,7 +42,7 @@ const items = ref([
     separator: true
   },
   {
-    label: 'Documents',
+    label: 'Tools',
     items: [
       {
         label: 'Unit Test',
@@ -60,6 +60,12 @@ const items = ref([
   {
     label: 'Profile',
     items: [
+      {
+        label: 'Calendar',
+        icon: 'pi pi-calendar',
+        link: "/calendar",
+        badge: '3'
+      },
       {
         label: 'Settings',
         icon: 'pi pi-cog',

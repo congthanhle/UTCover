@@ -36,13 +36,6 @@
 <script setup lang="ts">
 import { useToast } from "primevue/usetoast";
 import { ref } from 'vue';
-import ProgressSpinner from 'primevue/progressspinner';
-import DataTable from 'primevue/datatable';
-import BlockUI from 'primevue/blockui';
-import Column from 'primevue/column';
-import InputText from 'primevue/inputtext';
-import Button from 'primevue/button';
-import Toast from 'primevue/toast';
 
 const toast = useToast();
 const selectedPage = ref<any[]>([]);
