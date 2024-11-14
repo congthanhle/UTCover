@@ -1,33 +1,35 @@
 <template>
-  <BlockUI :blocked="isRunning" fullScreen />
-  <Toast />
-  <div class="folder-path-input">
-    <InputText type="text" v-model="folderPath" placeholder="Folder path" readonly="true" style="min-width: 60%;" />
-    <Button label="Browse" @click="getFolderPath" severity="success" outlined />
-  </div>
-  <div v-if="isLoading" class="isLoading">
-    <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="transparent" animationDuration=".5s"
-      aria-label="Custom ProgressSpinner" />
-  </div>
-  <div v-if="componentList.length > 0">
-    <h3 class="title">Components</h3>
-    <DataTable v-model:selection="selectedPage" showGridlines paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]"
-      :value="componentList" dataKey="path">
-      <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-      <Column field="filename" header="File name"></Column>
-    </DataTable>
-  </div>
-  <div v-if="pageList.length > 0">
-    <h3 class="title">Pages</h3>
-    <DataTable v-model:selection="selectedComponent" showGridlines paginator :rows="5"
-      :rowsPerPageOptions="[5, 10, 20, 50]" :value="pageList" dataKey="path">
-      <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-      <Column field="filename" header="File name"></Column>
-    </DataTable>
-  </div>
-  <div class="button-container">
-    <Button v-if="pageList.length > 0 || componentList.length > 0" label="Test Unit" severity="success" raised
-      style="margin-top: 16px;" @click="runTest" />
+  <div class="item-list">
+    <BlockUI :blocked="isRunning" fullScreen />
+    <Toast />
+    <div class="folder-path-input">
+      <InputText type="text" v-model="folderPath" placeholder="Folder path" readonly="true" style="min-width: 60%;" />
+      <Button label="Browse" @click="getFolderPath" severity="success" outlined />
+    </div>
+    <div v-if="isLoading" class="isLoading">
+      <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="transparent" animationDuration=".5s"
+        aria-label="Custom ProgressSpinner" />
+    </div>
+    <div v-if="componentList.length > 0" class="mt-3">
+      <h3 class="title mb-2">Components</h3>
+      <DataTable v-model:selection="selectedPage" showGridlines paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]"
+        :value="componentList" dataKey="path">
+        <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+        <Column field="filename" header="File name"></Column>
+      </DataTable>
+    </div>
+    <div v-if="pageList.length > 0" class="mt-3">
+      <h3 class="title mb-2">Pages</h3>
+      <DataTable v-model:selection="selectedComponent" showGridlines paginator :rows="5"
+        :rowsPerPageOptions="[5, 10, 20, 50]" :value="pageList" dataKey="path">
+        <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+        <Column field="filename" header="File name"></Column>
+      </DataTable>
+    </div>
+    <div class="button-container" >
+      <Button v-if="pageList.length > 0 || componentList.length > 0" label="Test Unit" severity="success" raised
+        style="margin-top: 16px;" @click="runTest" />
+    </div>
   </div>
 </template>
 
@@ -41,7 +43,6 @@ import Column from 'primevue/column';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Toast from 'primevue/toast';
-import MenuTool from '@components/molecules/MenuTool.vue';
 
 const toast = useToast();
 const selectedPage = ref<any[]>([]);
@@ -153,9 +154,18 @@ const runTest = async () => {
 
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
+@use "@assets/scss/variable";
+
+.item-list{
+  max-height: 100vh;
+  overflow-y: scroll;
+  padding: 20px;
+}
+
 .title {
-  color: rgb(33, 196, 93);
+  font-weight: 500;
+  color: variable.$main-color;
 }
 
 .button-container {

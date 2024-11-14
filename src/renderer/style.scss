@@ -1,4 +1,5 @@
 @import "primeicons/primeicons.css";
+@import "@assets/scss/variable";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -19,6 +20,19 @@
 
 #app {
   margin: 0 auto;
+}
+
+::-webkit-scrollbar {
+  width: 2px; 
+}
+
+::-webkit-scrollbar-track {
+  background: $white;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $main-color;
+  border-radius: 10px;
 }
 
 

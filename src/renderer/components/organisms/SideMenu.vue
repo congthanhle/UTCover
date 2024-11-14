@@ -5,7 +5,7 @@
       <span class="mt-1">NAME</span>
     </div>
     <div class="card flex justify-center">
-      <Menu :model="items" class="w-full md:w-60">
+      <Menu :model="items" class="w-full md:w-60 menu">
         <template #submenulabel="{ item }">
           <span class="text-green-500 font-bold">{{ item.label }}</span>
         </template>
@@ -21,9 +21,6 @@
         </template>
       </Menu>
     </div>
-    <footer>
-      <Button icon="pi pi-sign-out" label="Logout" outlined class="w-full"/>
-    </footer>
   </div>
 </template>
 
@@ -48,10 +45,10 @@ const items = ref([
     label: 'Documents',
     items: [
       {
-        label: 'New',
-        icon: 'pi pi-plus',
+        label: 'Unit Test',
+        icon: 'pi pi-verified',
         link: "/item-list",
-        shortcut: '⌘+N'
+        shortcut: ''
       },
       {
         label: 'Search',
@@ -74,10 +71,35 @@ const items = ref([
         badge: 2
       },
       {
-        label: 'Logout',
-        icon: 'pi pi-sign-out',
-        shortcut: '⌘+Q'
-      }
+        label: 'Messages',
+        icon: 'pi pi-inbox',
+        badge: 2
+      },
+      {
+        label: 'Messages',
+        icon: 'pi pi-inbox',
+        badge: 2
+      },
+      {
+        label: 'Messages',
+        icon: 'pi pi-inbox',
+        badge: 2
+      },
+      {
+        label: 'Messages',
+        icon: 'pi pi-inbox',
+        badge: 2
+      },
+      {
+        label: 'Messages',
+        icon: 'pi pi-inbox',
+        badge: 2
+      },
+      {
+        label: 'Messages',
+        icon: 'pi pi-inbox',
+        badge: 2
+      },
     ]
   },
 ]);
@@ -99,7 +121,11 @@ const goPage = (link: string) => {
   width: 300px;
   min-width: 300px;
   max-width: 300px;
+  max-height: 100vh;
+  overflow-y: scroll;
+  padding-bottom: 30px;
 }
+
 
 .profile {
   margin: 20px 10px 40px;

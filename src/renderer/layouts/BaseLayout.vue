@@ -21,6 +21,6 @@ import SideMenu from '@components/organisms/SideMenu.vue';
 
 main {
   width: 100%;
-  margin: 20px;
+
 }
 </style>
