@@ -76,36 +76,6 @@ const items = ref([
         icon: 'pi pi-inbox',
         badge: 2
       },
-      {
-        label: 'Messages',
-        icon: 'pi pi-inbox',
-        badge: 2
-      },
-      {
-        label: 'Messages',
-        icon: 'pi pi-inbox',
-        badge: 2
-      },
-      {
-        label: 'Messages',
-        icon: 'pi pi-inbox',
-        badge: 2
-      },
-      {
-        label: 'Messages',
-        icon: 'pi pi-inbox',
-        badge: 2
-      },
-      {
-        label: 'Messages',
-        icon: 'pi pi-inbox',
-        badge: 2
-      },
-      {
-        label: 'Messages',
-        icon: 'pi pi-inbox',
-        badge: 2
-      },
     ]
   },
 ]);

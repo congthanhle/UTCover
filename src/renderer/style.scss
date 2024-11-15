@@ -1,8 +1,9 @@
+@use "@assets/scss/variable";
 @import "primeicons/primeicons.css";
-@import "@assets/scss/variable";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -27,11 +28,11 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: $white;
+  background: variable.$white;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: $main-color;
+  background: variable.$main-color;
   border-radius: 10px;
 }
 
