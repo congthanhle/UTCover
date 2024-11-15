@@ -12,6 +12,9 @@ import Column from 'primevue/column';
 import InputText from 'primevue/inputtext';
 import Toast from 'primevue/toast';
 import Select from 'primevue/select';
+import DatePicker from 'primevue/datepicker';
+import Tag from 'primevue/tag';
+import Dialog from 'primevue/dialog';
 import router from './router';
 import ToastService from 'primevue/toastservice';
 
@@ -26,6 +29,9 @@ app.component('BlockUI', BlockUI);
 app.component('InputText', InputText);
 app.component('Toast', Toast);
 app.component('Select', Select);
+app.component('DatePicker', DatePicker);
+app.component('Tag', Tag);
+app.component('Dialog', Dialog);
 app.use(ToastService);
 app.use(PrimeVue, {
   theme: {
