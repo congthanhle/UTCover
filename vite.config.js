@@ -27,7 +27,7 @@ const config = defineConfig({
       '@pages': Path.resolve(__dirname, 'src/renderer/pages'),
       '@layouts': Path.resolve(__dirname, 'src/renderer/layouts'),
       '@assets': Path.resolve(__dirname, 'src/renderer/assets'),
-
+      '@utils': Path.resolve(__dirname, 'src/renderer/utils'),
     },
   },
   plugins: [vuePlugin()],

@@ -1,29 +1,31 @@
 <template>
   <div class="calendar-container">
-    <header class="calendar-header">
-      <div class="calendar-picker">
-        <Button icon="pi pi-angle-left" variant="text" @click="prevMonth" />
-        <DatePicker v-model="datepicker" view="month" dateFormat="mm/yy" class="text-center" />
-        <Button icon="pi pi-angle-right" variant="text" @click="nextMonth" />
+    <BlockUI :blocked="isEventDialog">
+      <header class="calendar-header">
+        <div class="calendar-picker">
+          <Button icon="pi pi-angle-left" variant="text" @click="prevMonth" />
+          <DatePicker v-model="datepicker" view="month" dateFormat="mm/yy" class="text-center" />
+          <Button icon="pi pi-angle-right" variant="text" @click="nextMonth" />
+        </div>
+        <Button icon="pi pi-star" variant="text" aria-label="Star" @click="goToToday" />
+      </header>
+      <div class="calendar-grid">
+        <div v-for="(day, index) in daysOfWeek" :key="index" class="calendar-day-header">
+          {{ day }}
+        </div>
+        <div v-for="(day, index) in calendarDays" :key="index" class="calendar-day"
+          :class="{ 'calendar-today': isToday(day), 'other-month': day.isOtherMonth }">
+          <Tag v-if="day.events.length > 0 && !isToday(day)" :value="day.date" severity="success" class="cursor-pointer"
+            @click="openEventDialog(day.events)">
+          </Tag>
+          <div v-else class="day-number">{{ day.date }}</div>
+        </div>
       </div>
-      <Button @click="goToToday">Today</Button>
-    </header>
-    <div class="calendar-grid">
-      <div v-for="(day, index) in daysOfWeek" :key="index" class="calendar-day-header">
-        {{ day }}
-      </div>
-      <div v-for="(day, index) in calendarDays" :key="index" class="calendar-day"
-        :class="{ 'calendar-today': isToday(day), 'other-month': day.isOtherMonth }">
-        <Tag v-if="day.events.length > 0 && !isToday(day)" :value="day.date" severity="success" class="cursor-pointer"
-          @click="openEventDialog(day.events)">
-        </Tag>
-        <div v-else class="day-number">{{ day.date }}</div>
-      </div>
-    </div>
+    </BlockUI>
     <Dialog v-model:visible="isEventDialog" header="Todo">
       <DataTable :value="dayEvents" tableStyle="min-width: 50vh">
-        <Column field="time" header=""></Column>
-        <Column field="title" header=""></Column>
+        <Column field="time" header="Time"></Column>
+        <Column field="title" header="Task"></Column>
       </DataTable>
     </Dialog>
   </div>
