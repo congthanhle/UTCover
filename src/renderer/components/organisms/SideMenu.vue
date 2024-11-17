@@ -51,10 +51,14 @@ const items = ref([
         shortcut: ''
       },
       {
-        label: 'Search',
-        icon: 'pi pi-search',
-        shortcut: '⌘+S'
-      }
+        label: 'Mock API',
+        icon: 'pi pi-play-circle',
+      },
+      {
+        label: 'Data Sample',
+        icon: 'pi pi-ticket',
+        link: "/data-sample",
+      },
     ]
   },
   {

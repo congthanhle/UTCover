@@ -5,6 +5,7 @@ import Result from '@pages/UnitTest/Result.vue';
 import Dashboard from '@pages/Dashboard.vue';
 import BaseLayout from '@layouts/BaseLayout.vue';
 import Calendar from '@pages/Calendar.vue';
+import DataSample from '@pages/DataSample.vue';
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
         path: '/calendar',
         name: 'Calendar',
         component: Calendar,
+      },
+      {
+        path: '/data-sample',
+        name: 'DataSample',
+        component: DataSample,
       },
     ],
   },

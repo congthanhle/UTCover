@@ -18,7 +18,11 @@
           <Tag v-if="day.events.length > 0 && !isToday(day)" :value="day.date" severity="success" class="cursor-pointer"
             @click="openEventDialog(day.events)">
           </Tag>
-          <div v-else class="day-number">{{ day.date }}</div>
+          <div v-else class="day-number">
+            <Tag v-if="day.events.length > 0 && isToday(day)" severity="warn" :value="day.date" class="cursor-pointer"
+              @click="openEventDialog(day.events)"></Tag>
+            <span v-else>{{ day.date }}</span>
+          </div>
         </div>
       </div>
     </BlockUI>
@@ -44,8 +48,8 @@ const isEventDialog = ref<boolean>(false);
 
 const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const events = [
-  { id: 1, date: new Date(today.getFullYear(), today.getMonth(), 5), title: 'Meeting at 9AM', time: '9:00' },
-  { id: 2, date: new Date(today.getFullYear(), today.getMonth(), 21), title: 'Project Deadline', time: '12:00' },
+  { id: 1, date: new Date(today.getFullYear(), 11, 1), title: 'Meeting at 9AM', time: '9:00' },
+  { id: 2, date: new Date(today.getFullYear(), today.getMonth(), 17), title: 'Project Deadline', time: '12:00' },
   { id: 3, date: new Date(today.getFullYear(), today.getMonth(), 21), title: 'Project Deadline', time: '15:00' },
 ];
 
