@@ -15,23 +15,51 @@ import Select from 'primevue/select';
 import DatePicker from 'primevue/datepicker';
 import Tag from 'primevue/tag';
 import Dialog from 'primevue/dialog';
+import Tabs from 'primevue/tabs';
+import TabList from 'primevue/tablist';
+import Tab from 'primevue/tab';
+import TabPanels from 'primevue/tabpanels';
+import TabPanel from 'primevue/tabpanel';
+import Textarea from 'primevue/textarea';
+import Splitter from 'primevue/splitter';
+import SplitterPanel from 'primevue/splitterpanel';
+import InputNumber from 'primevue/inputnumber';
+import { Codemirror } from 'vue-codemirror'
+import Skeleton from 'primevue/skeleton';
 import router from './router';
 import ToastService from 'primevue/toastservice';
 
 
 const app = createApp(App);
-app.component('Button', Button);
-app.component('Badge', Badge);
-app.component('ProgressSpinner', ProgressSpinner);
-app.component('DataTable', DataTable);
-app.component('Column', Column);
-app.component('BlockUI', BlockUI);
-app.component('InputText', InputText);
-app.component('Toast', Toast);
-app.component('Select', Select);
-app.component('DatePicker', DatePicker);
-app.component('Tag', Tag);
-app.component('Dialog', Dialog);
+const components = {
+  Button,
+  Badge,
+  ProgressSpinner,
+  DataTable,
+  Column,
+  BlockUI,
+  InputText,
+  Toast,
+  Select,
+  DatePicker,
+  Tag,
+  Dialog,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+  Textarea,
+  Splitter,
+  SplitterPanel,
+  InputNumber,
+  Codemirror,
+  Skeleton
+};
+
+Object.entries(components).forEach(([name, component]) => {
+  app.component(name, component);
+});
 app.use(ToastService);
 app.use(PrimeVue, {
   theme: {

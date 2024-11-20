@@ -10,7 +10,7 @@
           <span class="text-green-500 font-bold">{{ item.label }}</span>
         </template>
         <template #item="{ item, props }">
-          <a v-ripple class="flex items-center" v-bind="props.action" @click="goPage(item.link)">
+          <a v-ripple class="flex items-center" v-bind="props.action" @click="goPage(item.link)" :class="{ 'active': isActive(item.link) }">
             <span :class="item.icon" />
             <span>{{ item.label }}</span>
             <Badge v-if="item.badge" class="ml-auto" :value="item.badge" />
@@ -25,12 +25,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import Avatar from 'primevue/avatar';
 import Menu from 'primevue/menu';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
+const route = useRoute();
 
 const items = ref([
   {
@@ -88,6 +89,9 @@ const goPage = (link: string) => {
   router.push(link);
 }
 
+const isActive = (link: string) => {
+  return route.path === link;
+}
 </script>
 
 <style lang="scss">
@@ -106,8 +110,11 @@ const goPage = (link: string) => {
   padding-bottom: 30px;
 }
 
-
 .profile {
   margin: 20px 10px 40px;
+}
+
+a.active {
+  background-color: rgba(0, 253, 97, 0.103);
 }
 </style>

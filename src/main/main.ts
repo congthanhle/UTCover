@@ -3,6 +3,7 @@ import {join} from 'path';
 const path = require('path');
 const fs = require('fs');
 import ExternalTestRunner from './utils/TestRunner';
+import DataSample from './utils/DataSample';
 
 function createWindow () {
   const mainWindow = new BrowserWindow({
@@ -120,5 +121,17 @@ ipcMain.handle('run-external-tests', async (event, projectPath, filesPath) => {
     return { success: false, error: error.message };
   }
 });
+
+
+ipcMain.handle('generate-sample-data', async (_event, dto: any, amount: number, lang: string = "US") => {
+  const data = new DataSample(dto, amount, lang);
+  try {
+    const results = await data.generateSampleData();
+    return results;
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+});
+
 
 

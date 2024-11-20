@@ -8,6 +8,8 @@ export default interface ElectronApi {
   };
   getFilesFromPagesAndComponents: (rootPath: string) => Promise<any>;
   runExternalTests: (projectPath: string, filesPath?: string[]) => Promise<any>;
+  generateSampleData: (dto: any, amount: number, lang?: string) => Promise<any>;
+  copyText: (text: string) => void;
 }
 
 declare global {

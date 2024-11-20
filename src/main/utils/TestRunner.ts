@@ -229,7 +229,6 @@ class ExternalTestRunner {
   }
 
   private formatJestResults(results: any): TestResult {
-    console.log('13. Formatting Jest results');
     return {
       totalTests: results.numTotalTests,
       passedTests: results.numPassedTests,
@@ -246,30 +245,6 @@ class ExternalTestRunner {
         }))
       }))
     };
-  }
-
-  private formatMochaResults(results: string): TestResult {
-    console.log('14. Formatting Mocha results');
-    try {
-      // Parse JSON output từ Mocha
-      const mochaResults = JSON.parse(results);
-      
-      // Tính toán tổng số test
-      const totalTests = this.calculateTotalTests(mochaResults);
-      const passedTests = this.calculatePassedTests(mochaResults);
-      const failedTests = totalTests - passedTests;
-  
-      // Format kết quả theo interface TestResult
-      return {
-        totalTests,
-        passedTests,
-        failedTests,
-        testResults: this.transformMochaSuites(mochaResults.suites)
-      };
-    } catch (error) {
-      console.error('Error parsing Mocha results:', error);
-      throw error;
-    }
   }
   
   private calculateTotalTests(results: any): number {

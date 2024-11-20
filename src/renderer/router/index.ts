@@ -5,7 +5,7 @@ import Result from '@pages/UnitTest/Result.vue';
 import Dashboard from '@pages/Dashboard.vue';
 import BaseLayout from '@layouts/BaseLayout.vue';
 import Calendar from '@pages/Calendar.vue';
-import DataSample from '@pages/DataSample.vue';
+import DataSample from '@pages/DataSample/DataSample.vue';
 
 const routes = [
   {
