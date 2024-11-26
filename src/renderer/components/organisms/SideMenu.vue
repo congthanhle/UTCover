@@ -1,8 +1,8 @@
 <template>
-  <div class="side-menu">
+<ToggleSwitch v-model="isSidebar"  v-if="!isSidebar"/>
+  <div v-if="isSidebar" class="side-menu">
     <div class="profile flex flex-col items-center">
-      <Avatar icon="pi pi-user" class="mr-2" size="xlarge" shape="circle" />
-      <span class="mt-1">NAME</span>
+      <ToggleSwitch v-model="isSidebar" />
     </div>
     <div class="card flex justify-center">
       <Menu :model="items" class="w-full md:w-60 menu">
@@ -33,6 +33,7 @@ import { useRouter, useRoute } from 'vue-router';
 const router = useRouter();
 const route = useRoute();
 
+const isSidebar = ref<boolean>(true);
 const items = ref([
   {
     label: 'Home',
@@ -76,14 +77,10 @@ const items = ref([
         icon: 'pi pi-cog',
         shortcut: '⌘+O'
       },
-      {
-        label: 'Messages',
-        icon: 'pi pi-inbox',
-        badge: 2
-      },
     ]
   },
 ]);
+
 
 const goPage = (link: string) => {
   router.push(link);

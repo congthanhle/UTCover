@@ -54,6 +54,13 @@
             </div>
           </template>
         </Column>
+        <Column header="isNull">
+          <template #body="slotProps">
+            <div class="flex">
+              <Checkbox v-model="slotProps.data.isNull" binary />
+            </div>
+          </template>
+        </Column>
       </DataTable>
     </SplitterPanel>
     <SplitterPanel class="flex items-center justify-center" :size="50">
@@ -71,22 +78,29 @@ import { useToast } from "primevue/usetoast";
 
 interface Dto {
   property: string
-  type: string
+  type: string,
+  isNull: boolean
 }
 
 const toast = useToast();
-const dtoInput = ref<Dto[]>([{ property: "", type: "" }]);
+const dtoInput = ref<Dto[]>([{ property: "", type: "", isNull: false }]);
 const amount = ref<number>(1);
-const selectedCountry = ref(countries.find(country => country.name === 'United States'));
+const selectedCountry = ref(countries[1]);
 const sampleData = ref<any>("");
 const isGenerating = ref<boolean>(false);
 
 watch(dtoInput,
   () => {
     if (dtoInput.value.length > 0) {
+      if (dtoInput.value.length >= 3) {
+        const emptyDtoIndex = dtoInput.value.findIndex((e, index) => e.property === "" && e.type === "" && index != dtoInput.value.length - 1);
+        if (emptyDtoIndex !== -1) {
+          dtoInput.value.splice(emptyDtoIndex, 1);
+        }
+      }
       const lastDto = dtoInput.value[dtoInput.value.length - 1];
       if (lastDto.property !== "" && lastDto.type !== "") {
-        dtoInput.value.push({ property: "", type: "" });
+        dtoInput.value.push({ property: "", type: "", isNull: false });
       }
     }
   },
@@ -96,8 +110,8 @@ watch(dtoInput,
 const generateDataSample = async () => {
   if (dtoInput.value.length > 1) {
     dtoInput.value.pop();
-    const dtoObject = dtoInput.value.reduce((result: { [key: string]: string }, item) => {
-      result[item.property] = item.type;
+    const dtoObject = dtoInput.value.reduce((result: { [key: string]: string | null }, item) => {
+      result[item.property] = item.isNull ? item.type + " | null" : item.type;
       return result;
     }, {});
     isGenerating.value = true;

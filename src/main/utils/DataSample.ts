@@ -14,7 +14,8 @@ class DataSample {
     const prompt = `Generate sample data based on the following DTO schema. Make sure to include realistic values for each field. 
     The sample data should be diverse and reflect typical use cases. DTO Schema: ${this.json}. Number of samples: ${this.amount}. 
     If the key type is a string, the response for this key will use ${this.language}. 
-    Sensitive information such as country names, city names, names of celebrities, and company names, ... should be avoided.
+    Sensitive information such as country names, city names, names of celebrities, and company names, ... should be avoided. Object properties are placed on new lines for ease of viewing. 
+    Always return format [{}, {}] if there is more than one record
     Please give me only data sample with no explanation.`;
     const data = await this.fetchOpenAI(prompt);
     return data;

@@ -26,6 +26,8 @@ import SplitterPanel from 'primevue/splitterpanel';
 import InputNumber from 'primevue/inputnumber';
 import { Codemirror } from 'vue-codemirror'
 import Skeleton from 'primevue/skeleton';
+import Checkbox from 'primevue/checkbox';
+import ToggleSwitch from 'primevue/toggleswitch';
 import router from './router';
 import ToastService from 'primevue/toastservice';
 
@@ -54,7 +56,9 @@ const components = {
   SplitterPanel,
   InputNumber,
   Codemirror,
-  Skeleton
+  Skeleton,
+  Checkbox,
+  ToggleSwitch
 };
 
 Object.entries(components).forEach(([name, component]) => {
