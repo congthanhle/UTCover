@@ -3,9 +3,9 @@
     <BlockUI :blocked="isEventDialog">
       <header class="calendar-header">
         <div class="calendar-picker">
-          <Button icon="pi pi-angle-left" variant="text" @click="prevMonth" />
+          <Button icon="pi pi-angle-left" text @click="prevMonth" />
           <DatePicker v-model="datepicker" view="month" dateFormat="mm/yy" class="text-center" />
-          <Button icon="pi pi-angle-right" variant="text" @click="nextMonth" />
+          <Button icon="pi pi-angle-right" text @click="nextMonth" />
         </div>
         <Button icon="pi pi-star" variant="text" aria-label="Star" @click="goToToday" />
       </header>
@@ -14,7 +14,7 @@
           {{ day }}
         </div>
         <div v-for="(day, index) in calendarDays" :key="index" class="calendar-day"
-          :class="{ 'calendar-today': isToday(day), 'other-month': day.isOtherMonth }">
+          :class="{ 'calendar-today': isToday(day) && !day.isOtherMonth, 'other-month': day.isOtherMonth }">
           <Tag v-if="day.events.length > 0 && !isToday(day)" :value="day.date" severity="success" class="cursor-pointer"
             @click="openEventDialog(day.events)">
           </Tag>
