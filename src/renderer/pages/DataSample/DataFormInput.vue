@@ -48,7 +48,7 @@
         <Column header="Type">
           <template #body="slotProps">
             <div class="flex">
-              <InputText v-model="slotProps.data.type" />
+              <Select v-model="slotProps.data.type" :options="type" optionLabel="value" placeholder="Select a Type" class="w-full md:w-56" />
               <Button v-if="slotProps.index !== 0 && slotProps.data.property && slotProps.data.type" icon="pi pi-times"
                 size="small" text @click="deleteRow(slotProps.index)" />
             </div>
@@ -78,29 +78,47 @@ import { useToast } from "primevue/usetoast";
 
 interface Dto {
   property: string
-  type: string,
+  type: Type,
   isNull: boolean
+}
+interface Type {
+  key: string
+  value: string
 }
 
 const toast = useToast();
-const dtoInput = ref<Dto[]>([{ property: "", type: "", isNull: false }]);
+const dtoInput = ref<Dto[]>([{ property: "", type: {key: "", value: ""}, isNull: false }]);
 const amount = ref<number>(1);
-const selectedCountry = ref(countries[1]);
+const selectedCountry = ref(countries[3]);
 const sampleData = ref<any>("");
 const isGenerating = ref<boolean>(false);
+const type = ref<Type[]>([
+  {
+    key: "string",
+    value: "String"
+  },
+  {
+    key: "number",
+    value: "Number"
+  },
+  {
+    key: "boolean",
+    value: "Boolean"
+  }
+])
 
 watch(dtoInput,
   () => {
     if (dtoInput.value.length > 0) {
       if (dtoInput.value.length >= 3) {
-        const emptyDtoIndex = dtoInput.value.findIndex((e, index) => e.property === "" && e.type === "" && index != dtoInput.value.length - 1);
+        const emptyDtoIndex = dtoInput.value.findIndex((e, index) => e.property === "" && e.type.key === "" && e.type.value === "" && index != dtoInput.value.length - 1);
         if (emptyDtoIndex !== -1) {
           dtoInput.value.splice(emptyDtoIndex, 1);
         }
       }
       const lastDto = dtoInput.value[dtoInput.value.length - 1];
-      if (lastDto.property !== "" && lastDto.type !== "") {
-        dtoInput.value.push({ property: "", type: "", isNull: false });
+      if (lastDto.property !== "" && lastDto.type.key !== "") {
+        dtoInput.value.push({ property: "", type: { key: "", value: "" }, isNull: false });
       }
     }
   },
@@ -108,12 +126,14 @@ watch(dtoInput,
 );
 
 const generateDataSample = async () => {
-  if (dtoInput.value.length > 1) {
+    if (dtoInput.value.length > 1) {
     dtoInput.value.pop();
     const dtoObject = dtoInput.value.reduce((result: { [key: string]: string | null }, item) => {
-      result[item.property] = item.isNull ? item.type + " | null" : item.type;
+      const typeKey = typeof item.type === 'object' && item.type !== null ? item.type.key : '';
+      result[item.property] = item.isNull ? `${typeKey} | null` : typeKey;
       return result;
     }, {});
+    console.log("dtoObject: ", dtoObject);
     isGenerating.value = true;
     sampleData.value = "";
     try {

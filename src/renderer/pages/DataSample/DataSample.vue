@@ -2,15 +2,16 @@
   <div class="card">
     <Tabs value="0">
       <TabList>
-        <Tab value="0">Text</Tab>
         <Tab value="1">Form</Tab>
+        <Tab value="0">Text</Tab>
+        
       </TabList>
       <TabPanels>
-        <TabPanel value="0">
-          <DataTextInput />
-        </TabPanel>
         <TabPanel value="1">
           <DataFormInput />
+        </TabPanel>
+        <TabPanel value="0">
+          <DataTextInput />
         </TabPanel>
       </TabPanels>
     </Tabs>
