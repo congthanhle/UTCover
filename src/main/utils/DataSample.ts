@@ -22,7 +22,7 @@ class DataSample {
   }
 
   private async fetchOpenAI(prompt: string) {
-    const apiKey = "XQ9nYaxkAp6qSv4vjM0xwij7fse2F2onxfK3IxyR37b23379";
+    const apiKey = "mo1AzcXj4Izzy9ddMU2PXhY2Rg49SIaZ5p1R4tWU75639feb";
     try {
       const response = await fetch(
         "https://ai.runsystem.work/api/v1/chat/completions",

@@ -39,33 +39,35 @@
   </div>
   <Splitter style="height: calc(100vh - 167px)">
     <SplitterPanel :size="50">
-      <DataTable :value="dtoInput">
-        <Column header="Property">
-          <template #body="slotProps">
-            <InputText v-model="slotProps.data.property" />
-          </template>
-        </Column>
-        <Column header="Type">
-          <template #body="slotProps">
-            <div class="flex">
-              <Select v-model="slotProps.data.type" :options="type" optionLabel="value" placeholder="Select a Type" class="w-full md:w-56" />
-              <Button v-if="slotProps.index !== 0 && slotProps.data.property && slotProps.data.type" icon="pi pi-times"
-                size="small" text @click="deleteRow(slotProps.index)" />
-            </div>
-          </template>
-        </Column>
-        <Column header="isNull">
-          <template #body="slotProps">
-            <div class="flex">
-              <Checkbox v-model="slotProps.data.isNull" binary />
-            </div>
-          </template>
-        </Column>
-      </DataTable>
+      <DtoInputForm v-model:dto-input="dtoInput" />
     </SplitterPanel>
-    <SplitterPanel class="flex items-center justify-center" :size="50">
-      <Codemirror v-model="sampleData" class="json-editor" style="width: 100%; height: 100%;" :extensions="basicSetup"
-        :disabled="sampleData == '' || isGenerating" />
+    <SplitterPanel class="flex flex-col" :size="50">
+      <div class="overflow-auto">
+        <div v-for="(subDto, index) in subDtoList" :key="index" class="flex flex-col border mb-3">
+          <div class="flex justify-between items-center px-3">
+            <InputText v-model="subDto.key" class="w-4/6"/>
+            <Button 
+              label="" icon="pi pi-trash" 
+              class='m-4' outlined severity="danger" 
+              size="small" :disabled="isGenerating" 
+              style="width: 10%" 
+              @click="deleteSubDto(index)"/>
+          </div>
+          <DtoInputForm v-model:dto-input="subDto.value" scroll-height="200px"/>
+        </div>
+        <Button 
+          label="SubDto" 
+          icon="pi pi-plus" 
+          class='m-4' 
+          outlined 
+          size="small" 
+          :disabled="isGenerating" 
+          style="width: 20%" 
+          @click="addSubDto"/>
+      <!-- <Codemirror v-model="sampleData" class="json-editor" style="width: 100%; height: 100%;" :extensions="basicSetup"
+        :disabled="sampleData == '' || isGenerating" /> -->
+      </div>
+
     </SplitterPanel>
   </Splitter>
 </template>
@@ -75,55 +77,50 @@ import { ref, watch } from 'vue';
 import { countries } from '../../utils/codeConstants';
 import { basicSetup } from 'codemirror';
 import { useToast } from "primevue/usetoast";
+import DtoInputForm from '@components/organisms/DtoInputForm.vue';
 
 interface Dto {
   property: string
   type: Type,
   isNull: boolean
 }
+
 interface Type {
   key: string
-  value: string
+  value: string | Array<Dto>
 }
 
 const toast = useToast();
 const dtoInput = ref<Dto[]>([{ property: "", type: {key: "", value: ""}, isNull: false }]);
+const subDtoList = ref<Type[]>([]);
 const amount = ref<number>(1);
 const selectedCountry = ref(countries[3]);
 const sampleData = ref<any>("");
 const isGenerating = ref<boolean>(false);
-const type = ref<Type[]>([
-  {
-    key: "string",
-    value: "String"
-  },
-  {
-    key: "number",
-    value: "Number"
-  },
-  {
-    key: "boolean",
-    value: "Boolean"
-  }
-])
-
-watch(dtoInput,
-  () => {
-    if (dtoInput.value.length > 0) {
-      if (dtoInput.value.length >= 3) {
-        const emptyDtoIndex = dtoInput.value.findIndex((e, index) => e.property === "" && e.type.key === "" && e.type.value === "" && index != dtoInput.value.length - 1);
-        if (emptyDtoIndex !== -1) {
-          dtoInput.value.splice(emptyDtoIndex, 1);
-        }
-      }
-      const lastDto = dtoInput.value[dtoInput.value.length - 1];
-      if (lastDto.property !== "" && lastDto.type.key !== "") {
-        dtoInput.value.push({ property: "", type: { key: "", value: "" }, isNull: false });
-      }
+const typeList = ref<Type[]>([ 
+    {
+      key: "string",
+      value: "String"
+    },
+    {
+      key: "number",
+      value: "Number"
+    },
+    {
+      key: "boolean",
+      value: "Boolean"
     }
-  },
-  { deep: true }
-);
+  ]);
+
+watch(subDtoList,
+    () => {
+      if (subDtoList.value.length > 0) {
+        
+      }
+    },
+    { deep: true }
+  );
+
 
 const generateDataSample = async () => {
     if (dtoInput.value.length > 1) {
@@ -133,7 +130,6 @@ const generateDataSample = async () => {
       result[item.property] = item.isNull ? `${typeKey} | null` : typeKey;
       return result;
     }, {});
-    console.log("dtoObject: ", dtoObject);
     isGenerating.value = true;
     sampleData.value = "";
     try {
@@ -152,14 +148,16 @@ const generateDataSample = async () => {
 }
 
 const onCopy = () => {
-  window.electronAPI.copyText("abc");
+  window.electronAPI.copyText(sampleData.value);
 };
 
-const deleteRow = (index: number) => {
-  console.log("index: ", index);
-  console.log("dtoInput.value: ", dtoInput.value);
-  dtoInput.value.splice(index, 1);
-};
+const addSubDto = () => {
+  subDtoList.value.push({ key: "", value: [{ property: "", type: { key: "", value: "" }, isNull: false }] });
+}
+
+const deleteSubDto= (index: number) => {
+  subDtoList.value.splice(index, 1);
+}
 
 </script>
 

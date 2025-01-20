@@ -2,15 +2,14 @@
   <div class="card">
     <Tabs value="0">
       <TabList>
-        <Tab value="1">Form</Tab>
-        <Tab value="0">Text</Tab>
-        
+        <Tab value="0">Form</Tab>
+        <Tab value="1">Text</Tab>
       </TabList>
       <TabPanels>
-        <TabPanel value="1">
+        <TabPanel value="0">
           <DataFormInput />
         </TabPanel>
-        <TabPanel value="0">
+        <TabPanel value="1">
           <DataTextInput />
         </TabPanel>
       </TabPanels>
@@ -25,3 +24,4 @@ import DataTextInput from '@pages/DataSample/DataTextInput.vue';
 </script>
 
 <style scoped></style>
+

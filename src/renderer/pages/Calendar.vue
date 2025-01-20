@@ -134,7 +134,7 @@ const openEventDialog = (event: any) => {
 .calendar-container {
   max-width: 100%;
   margin: auto;
-  max-height: 100vh;
+  max-height: calc(100vh);
   overflow-y: scroll;
   padding-bottom: 20px;
 
@@ -165,7 +165,7 @@ const openEventDialog = (event: any) => {
     }
 
     .calendar-day {
-      height: 16vh;
+      height: 13.5vh;
       padding: 8px;
       position: relative;
       border-bottom: variable.$white 1px solid;

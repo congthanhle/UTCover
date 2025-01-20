@@ -1,4 +1,4 @@
-import {app, BrowserWindow, ipcMain, session, dialog} from 'electron';
+import {app, BrowserWindow, ipcMain, session, dialog, clipboard} from 'electron';
 import {join} from 'path';
 const path = require('path');
 const fs = require('fs');
@@ -133,5 +133,8 @@ ipcMain.handle('generate-sample-data', async (_event, dto: any, amount: number, 
   }
 });
 
+ipcMain.handle('copy-text', (event, text) => {
+  clipboard.writeText(text);
+});
 
 
